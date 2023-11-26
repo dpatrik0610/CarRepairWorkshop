@@ -89,12 +89,19 @@ namespace CarRepairWorkshop.API.Services
             }
         }
 
-        public async Task UpdateCustomerDataAsync(Customer customer)
+        public async Task UpdateCustomerDataAsync(Customer updatedCustomerData)
         {
             try
             {
-                _dbContext.Customers.Update(customer);
-                await _dbContext.SaveChangesAsync();
+                var existingCustomer = await _dbContext.Customers.FindAsync(updatedCustomerData.Id);
+                if (existingCustomer != null)
+                {
+                    existingCustomer.Name = updatedCustomerData.Name;
+                    existingCustomer.Address = updatedCustomerData.Address;
+                    existingCustomer.Email = updatedCustomerData.Email;
+
+                    await _dbContext.SaveChangesAsync();
+                }
             }
             catch (Exception ex)
             {

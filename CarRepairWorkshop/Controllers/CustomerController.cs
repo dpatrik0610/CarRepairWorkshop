@@ -61,17 +61,16 @@ namespace CarRepairWorkshop.API.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateCustomer(Guid id, [FromBody] Customer newCustomerData)
+        [HttpPut]
+        public async Task<ActionResult> UpdateCustomer([FromBody] Customer newCustomerData)
         {
             try
             {
-                var existingCustomer = await _customerService.GetCustomerByIdAsync(id);
+                var existingCustomer = await _customerService.GetCustomerByIdAsync(newCustomerData.Id);
 
                 if (existingCustomer == null)
                     return NotFound();
 
-                newCustomerData.Id = id; // Just to make sure it was not changed.
                 await _customerService.UpdateCustomerDataAsync(newCustomerData);
                 return NoContent();
             }
