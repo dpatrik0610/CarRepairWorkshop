@@ -1,22 +1,24 @@
 ﻿using CarRepairWorkshop.API.Services.Interfaces;
+using CarRepairWorkshop.Shared;
 using CarRepairWorkshop.Shared.Enums;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 
 namespace CarRepairWorkshop.API.Services
 {
     public class WorkEstimationService : IWorkEstimationService
     {
         private readonly ILogger<WorkEstimationService> _logger;
-        private readonly WorkshopDbContext _dbContext;
-        public WorkEstimationService(ILogger<WorkEstimationService> logger, WorkshopDbContext dbContext) 
+        public WorkEstimationService(ILogger<WorkEstimationService> logger) 
         {
             _logger = logger;
-            _dbContext = dbContext;
         }
 
-        public double CalculateWorkHourEstimation(RepairCategory category, double weightByAge, double weightByDamage)
+        public double CalculateWorkHourEstimation(WorkOrder workOrder)
         {
+            RepairCategory category = workOrder.RepairCategory;
+            int carAge = getCarAge(workOrder.DateOfProduction);
+            double weightByAge = getWeightMultiplierByAge(carAge);
+            double weightByDamage = getWeightMultiplierByDamage(workOrder.DamageSeverity);
+
             try
             {
                 double calculateFormula = (int)category * weightByAge * weightByDamage;
@@ -29,7 +31,7 @@ namespace CarRepairWorkshop.API.Services
             }
         }
 
-        public double getWeightMultiplierByAge(int age)
+        private double getWeightMultiplierByAge(int age)
         {
             if (age >= 0 && age <= 4)
             {
@@ -49,7 +51,7 @@ namespace CarRepairWorkshop.API.Services
             }
         }
 
-        public int getCarAge(DateTime productionDate)
+        private int getCarAge(DateTime productionDate)
         {
             DateTime currentDate = DateTime.Now;
             int age = currentDate.Year - productionDate.Year;
@@ -62,7 +64,7 @@ namespace CarRepairWorkshop.API.Services
             return age;
         }
 
-        public double getWeightMultiplierByDamage(int damageSeverity)
+        private double getWeightMultiplierByDamage(int damageSeverity)
         {
             if (damageSeverity >= 1 && damageSeverity <= 2)
             {
