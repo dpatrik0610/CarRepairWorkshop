@@ -30,6 +30,23 @@ namespace CarRepairWorkshop.API.Services
             }
         }
 
+        public async Task<IEnumerable<WorkOrder>> GetWorkOrdersByCustomerIdAsync(Guid customerId)
+        {
+            try
+            {
+                var workOrders = await _dbContext.WorkOrders
+                    .Where(x => x.CustomerId == customerId)
+                    .ToListAsync();
+
+                return workOrders;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in GetWorkOrdersByCustomerId: {ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<WorkOrder> GetWorkOrderByIdAsync(Guid workOrderId)
         {
             try

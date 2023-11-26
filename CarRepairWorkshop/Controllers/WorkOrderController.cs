@@ -32,6 +32,19 @@ namespace CarRepairWorkshop.API.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+        [HttpGet("ByCustomer/{customerId}")]
+        public async Task<ActionResult<IEnumerable<WorkOrder>>> GetWorkOrdersByCustomerId(Guid customerId)
+        {
+            try
+            {
+                var workOrders = await _workOrderService.GetWorkOrdersByCustomerIdAsync(customerId);
+                return Ok(workOrders);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<WorkOrder>> GetWorkOrderById(Guid id)
