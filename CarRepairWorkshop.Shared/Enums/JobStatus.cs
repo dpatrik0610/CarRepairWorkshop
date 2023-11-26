@@ -1,4 +1,4 @@
-﻿namespace CarRepairWorkshop.Shared
+﻿namespace CarRepairWorkshop.Shared.Enums
 {
     public enum JobStatus
     {
