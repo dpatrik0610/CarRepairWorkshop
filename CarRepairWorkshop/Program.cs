@@ -23,6 +23,7 @@ builder.Services.AddDbContext<WorkshopDbContext>(options =>
 });
 
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IWorkOrderService, WorkOrderService>();
 
 var app = builder.Build();
 
