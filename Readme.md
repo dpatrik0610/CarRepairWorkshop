@@ -1,4 +1,3 @@
-```markdown
 # Car Repair Workshop
 
 Car Repair Workshop is a web application designed for managing jobs and customers in a car repair shop.
@@ -23,11 +22,11 @@ Before you begin, ensure you have the following installed:
 
 2. Update the `appsettings.json` file with your database connection string.
 Ex:
-```json
-  "ConnectionStrings": {
-    "SQLite": "Data Source=Workshop.db"
-  }
-```
+   ```json
+     "ConnectionStrings": {
+       "SQLite": "Data Source=Workshop.db"
+     }
+   ```
 3. Open the solution in Visual Studio.
 
 4. Run the following commands to apply migrations and update the database:
