@@ -1,10 +1,12 @@
-﻿namespace CarRepairWorkshop.API.Services.Interfaces
+﻿using CarRepairWorkshop.Shared.Enums;
+
+namespace CarRepairWorkshop.API.Services.Interfaces
 {
     public interface IWorkEstimationService
     {
-        int getWightMultiplierByCategory();
-        double getWeightMultiplierByAge();
-        double getWeightMultiplierByDamage();
-        double CalculateWorkHourEstimation(string category, int ageOfCar, int damageSeverity);
+        double getWeightMultiplierByAge(int age);
+        double getWeightMultiplierByDamage(int damageSeverity);
+        int getCarAge(DateTime productionDate);
+        double CalculateWorkHourEstimation(RepairCategory category, double weightByAge, double weightByDamage);
     }
 }
