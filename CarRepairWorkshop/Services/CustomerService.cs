@@ -6,10 +6,10 @@ namespace CarRepairWorkshop.API.Services
 {
     public class CustomerService : ICustomerService
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<CustomerService> _logger;
         private readonly WorkshopDbContext _dbContext;
 
-        public CustomerService(ILogger logger, WorkshopDbContext dbContext)
+        public CustomerService(ILogger<CustomerService> logger, WorkshopDbContext dbContext)
         {
             _logger = logger;
             _dbContext = dbContext;

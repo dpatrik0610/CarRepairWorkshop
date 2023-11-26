@@ -1,24 +1,28 @@
+using CarRepairWorkshop.API.Services;
+using CarRepairWorkshop.API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
-
+// Logging
 builder.Host.UseSerilog(
     (_, configuration) => configuration
         .MinimumLevel.Information()
-    .WriteTo.Console()
+        .WriteTo.Console()
 );
 
+// Services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 builder.Services.AddDbContext<WorkshopDbContext>(options =>
 {
     options.UseSqlite(builder.Configuration.GetConnectionString("SQLite"));
     options.UseLazyLoadingProxies();
 });
+
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 
 var app = builder.Build();
 
