@@ -1,4 +1,3 @@
-```markdown
 # Car Repair Workshop
 
 Car Repair Workshop is a web application designed for managing jobs and customers in a car repair shop.
