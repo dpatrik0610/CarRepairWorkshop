@@ -1,37 +1,55 @@
 ﻿using CarRepairWorkshop.API.Services.Interfaces;
 using CarRepairWorkshop.Shared;
 using CarRepairWorkshop.Shared.Enums;
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace CarRepairWorkshop.API.Services
 {
     public class WorkEstimationService : IWorkEstimationService
     {
         private readonly ILogger<WorkEstimationService> _logger;
-        public WorkEstimationService(ILogger<WorkEstimationService> logger) 
+
+        public WorkEstimationService(ILogger<WorkEstimationService> logger)
         {
             _logger = logger;
         }
 
         public double CalculateWorkHourEstimation(WorkOrder workOrder)
         {
-            RepairCategory category = workOrder.RepairCategory;
-            int carAge = getCarAge(workOrder.DateOfProduction);
-            double weightByAge = getWeightMultiplierByAge(carAge);
-            double weightByDamage = getWeightMultiplierByDamage(workOrder.DamageSeverity);
-
             try
             {
+                ValidateWorkOrder(workOrder);
+
+                RepairCategory category = workOrder.RepairCategory;
+                int carAge = GetCarAge(workOrder.DateOfProduction);
+                double weightByAge = GetWeightMultiplierByAge(carAge);
+                double weightByDamage = GetWeightMultiplierByDamage(workOrder.DamageSeverity);
+
                 double calculateFormula = (int)category * weightByAge * weightByDamage;
                 return calculateFormula;
             }
-            catch   (Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogError($"Error at CalculateWorkHourEstimation() : {ex.Message}");
+                _logger.LogError($"Error at CalculateWorkHourEstimation: {ex.Message}");
                 throw;
             }
         }
 
-        private double getWeightMultiplierByAge(int age)
+        private void ValidateWorkOrder(WorkOrder workOrder)
+        {
+            if (workOrder == null)
+            {
+                throw new ArgumentNullException(nameof(workOrder));
+            }
+
+            if (workOrder.DateOfProduction > DateTime.Now)
+            {
+                throw new ArgumentException("The production date cannot be in the future.");
+            }
+        }
+
+        private double GetWeightMultiplierByAge(int age)
         {
             if (age >= 0 && age <= 4)
             {
@@ -51,11 +69,11 @@ namespace CarRepairWorkshop.API.Services
             }
         }
 
-        private int getCarAge(DateTime productionDate)
+        private int GetCarAge(DateTime productionDate)
         {
             DateTime currentDate = DateTime.Now;
             int age = currentDate.Year - productionDate.Year;
-            // Basically if the current month and day is sooner than the day it was produced, than the "birthday" did not occure yet.
+
             if (currentDate.Month < productionDate.Month || (currentDate.Month == productionDate.Month && currentDate.Day < productionDate.Day))
             {
                 age--;
@@ -64,7 +82,7 @@ namespace CarRepairWorkshop.API.Services
             return age;
         }
 
-        private double getWeightMultiplierByDamage(int damageSeverity)
+        private double GetWeightMultiplierByDamage(int damageSeverity)
         {
             if (damageSeverity >= 1 && damageSeverity <= 2)
             {
