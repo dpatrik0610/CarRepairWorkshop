@@ -2,9 +2,9 @@
 {
     public enum RepairCategory
     {
-        Karosszeria,
-        Motor,
-        Futomu,
-        Fekberendezes
+        Karosszeria = 3,
+        Motor = 8,
+        Futomu = 6,
+        Fekberendezes = 4
     }
 }

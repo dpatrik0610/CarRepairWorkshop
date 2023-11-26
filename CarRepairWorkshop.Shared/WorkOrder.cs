@@ -17,7 +17,8 @@ namespace CarRepairWorkshop.Shared
         public string LicensePlate { get; set; } = string.Empty;
 
         [Required]
-        [Range(typeof(DateTime), "1900-01-01", "{0:yyyy-MM-dd}", ErrorMessage = "Date of production cannot be lower than 1900 and above today's date.")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [Range(typeof(DateTime), "1900-01-01", "9999-12-31", ErrorMessage = "Date of production cannot be lower than 1900 and above today's date.")]
         public DateTime DateOfProduction { get; set; } = DateTime.Now;
 
         [Required]

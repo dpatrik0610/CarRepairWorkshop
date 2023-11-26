@@ -1,4 +1,5 @@
-﻿using CarRepairWorkshop.API.Services.Interfaces;
+﻿using CarRepairWorkshop.API.Services;
+using CarRepairWorkshop.API.Services.Interfaces;
 using CarRepairWorkshop.Shared;
 using CarRepairWorkshop.Shared.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,12 @@ namespace CarRepairWorkshop.API.Controllers
     public class WorkOrderController : ControllerBase
     {
         private readonly IWorkOrderService _workOrderService;
+        private readonly ICustomerService _customerService;
 
-        public WorkOrderController(IWorkOrderService workOrderService)
+        public WorkOrderController(IWorkOrderService workOrderService, ICustomerService customerService)
         {
             _workOrderService = workOrderService;
+            _customerService = customerService;
         }
 
         [HttpGet]
@@ -53,6 +56,13 @@ namespace CarRepairWorkshop.API.Controllers
         {
             try
             {
+                // Check if the customer exists before adding the work order
+                var customer = await _customerService.GetCustomerByIdAsync(workOrder.CustomerId);
+                if (customer == null)
+                {
+                    return NotFound($"Customer with ID {workOrder.CustomerId} not found.");
+                }
+
                 await _workOrderService.AddWorkOrderAsync(workOrder);
                 return CreatedAtAction(nameof(GetWorkOrderById), new { id = workOrder.Id }, workOrder);
             }
