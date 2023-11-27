@@ -28,8 +28,4 @@
     <ProjectReference Include="..\CarRepairWorkshop\CarRepairWorkshop.API.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="WorkOrderService.Tests\" />
-  </ItemGroup>
-
 </Project>
