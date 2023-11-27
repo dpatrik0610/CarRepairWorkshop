@@ -8,7 +8,7 @@ using CarRepairWorkshop.UI.Services.Interfaces;
 
 namespace CarRepairWorkshop.UI.Services
 {
-    public class WorkOrderService : IWorkOrderService, ICalculateEstimatedTimeService
+    public class WorkOrderService : IWorkOrderService
     {
         private readonly HttpClient _httpClient;
 
@@ -32,10 +32,9 @@ namespace CarRepairWorkshop.UI.Services
         public async Task DeleteWorkOrderAsync(Guid workOrderId) =>
             await _httpClient.DeleteAsync($"WorkOrder/{workOrderId}");
 
-        public async Task UpdateWorkOrderStatusAsync(Guid id, JobStatus jobStatus)
+        public async Task UpdateWorkOrderStatusAsync(Guid id)
         {
-            var updateData = new { Id = id, Status = jobStatus };
-            await _httpClient.PutAsJsonAsync($"WorkOrder/{id}/UpdateStatus", updateData);
+            await _httpClient.PostAsJsonAsync($"WorkOrder/Promote", id);
         }
 
         public async Task<double?> CalculateEstimatedTime(WorkOrder workOrder)

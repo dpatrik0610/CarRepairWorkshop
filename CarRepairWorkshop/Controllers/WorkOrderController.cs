@@ -106,7 +106,7 @@ namespace CarRepairWorkshop.API.Controllers
             }
         }
 
-        [HttpPut("/Promote")]
+        [HttpPost("Promote")]
         public async Task<ActionResult> UpdateWorkOrderStatus([FromBody] Guid id)
         {
             try

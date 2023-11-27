@@ -9,7 +9,8 @@ namespace CarRepairWorkshop.UI.Services.Interfaces
         Task<IEnumerable<WorkOrder>?> GetWorkOrdersByCustomerIdAsync(string workOrderName);
         Task<WorkOrder?> GetWorkOrderByIdAsync(Guid workOrderId);
         Task AddWorkOrderAsync(WorkOrder workOrder);
-        Task UpdateWorkOrderStatusAsync(Guid id, JobStatus jobStatus);
+        Task UpdateWorkOrderStatusAsync(Guid id);
         Task DeleteWorkOrderAsync(Guid workOrderId);
+        Task<double?> CalculateEstimatedTime(WorkOrder workOrder);
     }
 }
