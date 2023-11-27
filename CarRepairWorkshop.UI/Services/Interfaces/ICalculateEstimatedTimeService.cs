@@ -4,6 +4,6 @@ namespace CarRepairWorkshop.UI.Services.Interfaces
 {
     public interface ICalculateEstimatedTimeService
     {
-        double CalculateEstimatedTime(WorkOrder workOrder);
+        Task<double?> CalculateEstimatedTime(WorkOrder workOrder);
     }
 }

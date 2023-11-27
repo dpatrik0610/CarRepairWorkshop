@@ -5,10 +5,9 @@ namespace CarRepairWorkshop.UI.Services.Interfaces
     public interface ICustomerService
     {
         Task<IEnumerable<Customer>?> GetCustomersAsync();
-        Task<Customer?> GetCustomerByIdAsync(int customerId);
-        Task<Customer?> GetCustomerByNameAsync(string customerName);
+        Task<Customer?> GetCustomerByIdAsync(Guid customerId);
         Task AddCustomerAsync(Customer customer);
         Task UpdateCustomerAsync(Customer customer);
-        Task DeleteCustomerAsync(int customerId);
+        Task DeleteCustomerAsync(Guid customerId);
     }
 }

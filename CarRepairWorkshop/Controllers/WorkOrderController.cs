@@ -12,11 +12,12 @@ namespace CarRepairWorkshop.API.Controllers
     {
         private readonly IWorkOrderService _workOrderService;
         private readonly ICustomerService _customerService;
-
-        public WorkOrderController(IWorkOrderService workOrderService, ICustomerService customerService)
+        private readonly IWorkEstimationService _workEstimationService;
+        public WorkOrderController(IWorkOrderService workOrderService, ICustomerService customerService, IWorkEstimationService workEstimationService)
         {
             _workOrderService = workOrderService;
             _customerService = customerService;
+            _workEstimationService = workEstimationService;
         }
 
         [HttpGet]
@@ -118,6 +119,24 @@ namespace CarRepairWorkshop.API.Controllers
                 await _workOrderService.UpdateWorkOrderStatusAsync(id, newStatus);
 
                 return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("/calculate")]
+        public ActionResult<double> CalculateEstimatedTime([FromBody] WorkOrder workOrder)
+        {
+            try
+            {
+                double estimatedTime = _workEstimationService.CalculateWorkHourEstimation(workOrder);
+                return Ok(estimatedTime);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest($"Bad Request: {ex.Message}");
             }
             catch (Exception ex)
             {

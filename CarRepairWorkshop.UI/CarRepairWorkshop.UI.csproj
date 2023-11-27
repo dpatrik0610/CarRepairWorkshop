@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Interfaces\" />
+    <ProjectReference Include="..\CarRepairWorkshop.Shared\CarRepairWorkshop.Shared.csproj" />
   </ItemGroup>
 
 </Project>

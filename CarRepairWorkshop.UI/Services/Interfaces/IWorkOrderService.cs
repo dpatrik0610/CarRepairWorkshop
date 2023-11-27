@@ -1,4 +1,5 @@
 ﻿using CarRepairWorkshop.Shared;
+using CarRepairWorkshop.Shared.Enums;
 
 namespace CarRepairWorkshop.UI.Services.Interfaces
 {
@@ -6,9 +7,9 @@ namespace CarRepairWorkshop.UI.Services.Interfaces
     {
         Task<IEnumerable<WorkOrder>?> GetWorkOrdersAsync();
         Task<IEnumerable<WorkOrder>?> GetWorkOrdersByCustomerIdAsync(string workOrderName);
-        Task<WorkOrder?> GetWorkOrderByIdAsync(int workOrderId);
+        Task<WorkOrder?> GetWorkOrderByIdAsync(Guid workOrderId);
         Task AddWorkOrderAsync(WorkOrder workOrder);
-        Task UpdateWorkOrderAsync(WorkOrder workOrder);
-        Task DeleteWorkOrderAsync(int workOrderId);
+        Task UpdateWorkOrderStatusAsync(Guid id, JobStatus jobStatus);
+        Task DeleteWorkOrderAsync(Guid workOrderId);
     }
 }
