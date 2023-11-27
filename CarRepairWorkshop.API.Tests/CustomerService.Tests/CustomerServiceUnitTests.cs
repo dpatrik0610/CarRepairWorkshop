@@ -126,10 +126,8 @@ public class CustomerServiceUnitTests
         var logger = Substitute.For<ILogger<CustomerService>>();
         var service = new CustomerService(logger, dbContext);
 
-        var customerId = Guid.NewGuid();
         var customer = new Customer
         {
-            Id = customerId,
             Name = "John Doe",
             Address = "123 Main St",
             Email = "john.doe@example.com"
@@ -138,10 +136,10 @@ public class CustomerServiceUnitTests
         await dbContext.SaveChangesAsync();
 
         // Act
-        await service.DeleteCustomerAsync(customerId);
+        await service.DeleteCustomerAsync(customer.Id);
 
         // Assert
-        var result = await dbContext.Customers.FirstOrDefaultAsync(c => c.Id == customerId);
+        var result = await dbContext.Customers.FirstOrDefaultAsync(c => c.Id == customer.Id);
         Assert.Null(result);
     }
 
@@ -153,10 +151,8 @@ public class CustomerServiceUnitTests
         var logger = Substitute.For<ILogger<CustomerService>>();
         var service = new CustomerService(logger, dbContext);
 
-        var customerId = Guid.NewGuid();
         var customer = new Customer
         {
-            Id = customerId,
             Name = "John Doe",
             Address = "123 Main St",
             Email = "john.doe@example.com"
@@ -166,7 +162,7 @@ public class CustomerServiceUnitTests
 
         var updatedCustomerData = new Customer
         {
-            Id = customerId,
+            Id = customer.Id,
             Name = "Updated Name",
             Address = "456 New St",
             Email = "updated.email@example.com"
@@ -176,7 +172,7 @@ public class CustomerServiceUnitTests
         await service.UpdateCustomerDataAsync(updatedCustomerData);
 
         // Assert
-        var result = await dbContext.Customers.FirstOrDefaultAsync(c => c.Id == customerId);
+        var result = await dbContext.Customers.FirstOrDefaultAsync(c => c.Id == customer.Id);
         Assert.NotNull(result);
         Assert.Equal(updatedCustomerData.Name, result.Name);
         Assert.Equal(updatedCustomerData.Address, result.Address);
