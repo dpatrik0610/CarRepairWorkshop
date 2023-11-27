@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarRepairWorkshop.API", "Ca
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarRepairWorkshop.Shared", "CarRepairWorkshop.Shared\CarRepairWorkshop.Shared.csproj", "{58809809-C937-4C5C-B0DE-F851ECF0D0DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRepairWorkshop.UI", "CarRepairWorkshop.UI\CarRepairWorkshop.UI.csproj", "{9326D1DC-D475-4455-A767-8D5BE574C4F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarRepairWorkshop.UI", "CarRepairWorkshop.UI\CarRepairWorkshop.UI.csproj", "{9326D1DC-D475-4455-A767-8D5BE574C4F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRepairWorkshop.API.Tests", "CarRepairWorkshop.API.Tests\CarRepairWorkshop.API.Tests.csproj", "{6A97E8A9-5AF7-451A-B081-8A5C94DE809B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarRepairWorkshop.API.Tests", "CarRepairWorkshop.API.Tests\CarRepairWorkshop.API.Tests.csproj", "{6A97E8A9-5AF7-451A-B081-8A5C94DE809B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

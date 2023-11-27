@@ -1,0 +1,44 @@
+﻿@page "/details/{Id}"
+@inject ICustomerService CustomerService
+@inject NavigationManager NavigationManager
+
+@if (customer is not null)
+{
+    <h3>@customer.Name's Details</h3>
+    <CustomerForm customer="customer" ButtonTitle="Update Customer Details" OnValidSubmit="UpdateData" />
+}
+else if (!_isFound)
+{
+    <p>Customer with id '@Id' is not found!</p>
+}
+else
+{
+    <p>Loading Data...</p>
+}
+
+@code {
+    private bool _isFound = true;
+
+    [Parameter]
+    public string Id { get; set; }
+
+    private Customer customer { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            customer = await CustomerService.GetCustomerByIdAsync(Guid.Parse(Id));
+        }
+        catch
+        {
+            _isFound = false;
+        }
+    }
+
+    private async Task UpdateData()
+    {
+        await CustomerService.UpdateCustomerAsync(customer);
+        NavigationManager.NavigateTo("customers");
+    }
+}

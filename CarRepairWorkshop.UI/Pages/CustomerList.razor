@@ -1,0 +1,64 @@
+﻿@page "/customers"
+@inject ICustomerService CustomerService
+
+
+<PageTitle>Customers list</PageTitle>
+<h1>All customers:</h1>
+@if (Customers is not null)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-hover table-bordered table-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">E-mail</th>
+                            <th>Commands</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var customer in Customers)
+                        {
+                            <tr>
+                                <td>@customer.Name</td>
+                                <td>@customer.Address</td>
+                                <td>@customer.Email</td>
+                                <td width="20%">
+                                    <div class="btn-group w-100" role="group">
+                                        <a class="btn btn-outline-info m-1" href="details/@customer.Id.ToString()">Details</a>
+                                        <button class="btn btn-outline-danger m-1" @onclick="() => RemoveCustomer(customer.Id)">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <svg class="loading-progress">
+        <circle r="40%" cx="50%" cy="50%" />
+        <circle r="40%" cx="50%" cy="50%" />
+    </svg>
+    <br/>
+    <p>Loading...</p>
+}
+
+@code {
+    public IEnumerable<Customer>? Customers { get; set; }
+
+    protected override async Task OnInitializedAsync() {
+        Customers = await CustomerService.GetCustomersAsync();
+    }
+
+    private async Task RemoveCustomer(Guid customerId)
+    {
+        await CustomerService.DeleteCustomerAsync(customerId);
+        Customers = await CustomerService.GetCustomersAsync();
+    }
+}
