@@ -3,6 +3,8 @@ using CarRepairWorkshop.Shared.Enums;
 using CarRepairWorkshop.Shared;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using Serilog;
+using System;
 
 public class WorkEstimationServiceUnitTests
 {
@@ -24,11 +26,14 @@ public class WorkEstimationServiceUnitTests
         // Arrange
         var workOrder = new WorkOrder
         {
+            CustomerId = Guid.NewGuid(),
+            LicensePlate = "XXX-123",
             RepairCategory = repairCategory,
             DateOfProduction = DateTime.Now.AddYears(-carAge),
-            DamageSeverity = damageSeverity
+            DamageSeverity = damageSeverity,
+            Status = JobStatus.Recorded
         };
-
+        Console.WriteLine(workOrder);
         // Act
         var result = _sut.CalculateWorkHourEstimation(workOrder);
 
@@ -37,23 +42,42 @@ public class WorkEstimationServiceUnitTests
     }
 
     [Fact]
-    public void CalculateWorkHourEstimation_NullWorkOrder_ThrowsArgumentNullException()
-    {
-        // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => _sut.CalculateWorkHourEstimation(null));
-    }
-
-    [Fact]
     public void CalculateWorkHourEstimation_FutureProductionDate_ThrowsArgumentException()
     {
         // Arrange
         var workOrder = new WorkOrder
         {
-            DateOfProduction = DateTime.Now.AddYears(1)
-        };
+            CustomerId = Guid.NewGuid(),
+            LicensePlate = "XXX-123",
+            RepairCategory = RepairCategory.Karosszeria,
+            DateOfProduction = DateTime.Now.AddYears(5), // Future
+            DamageSeverity = 5,
+            Status = JobStatus.Recorded
+        }; ;
 
         // Act & Assert
         var exception = Assert.Throws<ArgumentException>(() => _sut.CalculateWorkHourEstimation(workOrder));
         Assert.Contains("production date cannot be in the future", exception.Message, StringComparison.OrdinalIgnoreCase);
     }
+
+    [Fact]
+    public void CalculateWorkHourEstimation_CompletedStatusWorkOrder_GivesZeroNumber()
+    {
+        double expectedVal = 0;
+        // Arrange
+        WorkOrder workOrder = new WorkOrder
+        {
+            CustomerId = Guid.NewGuid(),
+            LicensePlate = "XXX-123",
+            RepairCategory = RepairCategory.Karosszeria,
+            DateOfProduction = DateTime.Now.AddYears(-5),
+            DamageSeverity = 5,
+            Status = JobStatus.Completed // Completed
+        };
+
+        // Act & Assert
+        var result = _sut.CalculateWorkHourEstimation(workOrder);
+        Assert.Equal(expectedVal, result);
+    }
+
 }

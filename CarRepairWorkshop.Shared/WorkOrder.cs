@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using CarRepairWorkshop.Shared.Enums;
 
@@ -13,10 +14,12 @@ namespace CarRepairWorkshop.Shared
         [Required] public Guid CustomerId { get; set; }
 
         [Required]
+        [NotNull]
         [RegularExpression(@"^[A-Z]{3}-[0-9]{3}$", ErrorMessage = "License plate must be in the format XXX-123.")]
-        public string LicensePlate { get; set; } = string.Empty;
+        public string LicensePlate { get; set; }
 
         [Required]
+        [NotNull]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Range(typeof(DateTime), "1900-01-01", "9999-12-31", ErrorMessage = "Date of production cannot be lower than 1900 and above today's date.")]
         public DateTime DateOfProduction { get; set; } = DateTime.Now;
@@ -26,8 +29,10 @@ namespace CarRepairWorkshop.Shared
         [Required]
         [MaxLength(150)]
         public string Description { get; set; } = string.Empty;
+
         [Required]
-        [Range(1, 10)]
+        [NotNull]
+        [Range(1, 10, ErrorMessage = "Value must be in range 1 - 10")]
         public int DamageSeverity { get; set; }
 
         private JobStatus _status = JobStatus.Recorded;

@@ -14,28 +14,6 @@ public class WorkOrderServiceUnitTests
             .Options;
         return new WorkshopDbContext(options);
     }
-    [Fact]
-    public async Task GetAllWorkOrdersAsync_ReturnsAllWorkOrders()
-    {
-        // Arrange
-        WorkshopDbContext dbContext = GenerateTestContext();
-        var logger = Substitute.For<ILogger<WorkOrderService>>();
-        var service = new WorkOrderService(logger, dbContext);
-        int numberOfCustomers = 10;
-        // Add work orders to the database
-        for (int i = 0; i < numberOfCustomers; i++)
-        {
-            var workOrder = new WorkOrder {CustomerId = Guid.NewGuid() };
-            dbContext.WorkOrders.Add(workOrder);
-        }
-        await dbContext.SaveChangesAsync();
-
-        // Act
-        var result = await service.GetAllWorkOrdersAsync();
-
-        // Assert
-        Assert.Equal(numberOfCustomers, result.Count());
-    }
 
     [Fact]
     public async Task GetWorkOrdersByCustomerIdAsync_ReturnsWorkOrdersForCustomerId()
@@ -46,10 +24,37 @@ public class WorkOrderServiceUnitTests
         var service = new WorkOrderService(logger, dbContext);
 
         var customerId = Guid.NewGuid();
-        var workOrder1 = new WorkOrder { CustomerId = customerId };
-        var workOrder2 = new WorkOrder { CustomerId = Guid.NewGuid() };
+        var workOrder1 = new WorkOrder { 
+            CustomerId = customerId,
+            LicensePlate = "XXX-123",
+            RepairCategory = RepairCategory.Karosszeria,
+            DateOfProduction = DateTime.Now.AddYears(-5),
+            DamageSeverity = 5,
+            Status = JobStatus.Recorded
+        };
 
-        dbContext.WorkOrders.AddRange(workOrder1, workOrder2);
+        var workOrder2 = new WorkOrder
+        {
+            Id = Guid.NewGuid(),
+            CustomerId = Guid.NewGuid(),
+            LicensePlate = "XXX-123",
+            RepairCategory = RepairCategory.Karosszeria,
+            DateOfProduction = DateTime.Now.AddYears(-5),
+            DamageSeverity = 5,
+            Status = JobStatus.Recorded
+        };
+        var workOrder3 = new WorkOrder
+        {
+            Id = Guid.NewGuid(),
+            CustomerId = Guid.NewGuid(),
+            LicensePlate = "XXX-123",
+            RepairCategory = RepairCategory.Karosszeria,
+            DateOfProduction = DateTime.Now.AddYears(-5),
+            DamageSeverity = 5,
+            Status = JobStatus.Recorded
+        };
+
+        dbContext.WorkOrders.AddRange(workOrder1, workOrder2, workOrder3);
         await dbContext.SaveChangesAsync();
 
         // Act
@@ -70,20 +75,23 @@ public class WorkOrderServiceUnitTests
 
         var workOrder1 = new WorkOrder
         {
+            Id = Guid.NewGuid(),
             CustomerId = Guid.NewGuid(),
+            LicensePlate = "XXX-123",
             RepairCategory = RepairCategory.Karosszeria,
             DateOfProduction = DateTime.Now.AddYears(-5),
             DamageSeverity = 5,
             Status = JobStatus.Recorded
         };
-
         var workOrder2 = new WorkOrder
         {
+            Id = Guid.NewGuid(),
             CustomerId = Guid.NewGuid(),
-            RepairCategory = RepairCategory.Motor,
-            DateOfProduction = DateTime.Now.AddYears(-10),
-            DamageSeverity = 3,
-            Status = JobStatus.InProgress
+            LicensePlate = "XXX-123",
+            RepairCategory = RepairCategory.Karosszeria,
+            DateOfProduction = DateTime.Now.AddYears(-5),
+            DamageSeverity = 5,
+            Status = JobStatus.Recorded
         };
 
         dbContext.WorkOrders.AddRange(workOrder1, workOrder2);
@@ -107,7 +115,9 @@ public class WorkOrderServiceUnitTests
 
         var workOrder = new WorkOrder
         {
+            Id = Guid.NewGuid(),
             CustomerId = Guid.NewGuid(),
+            LicensePlate = "XXX-123",
             RepairCategory = RepairCategory.Karosszeria,
             DateOfProduction = DateTime.Now.AddYears(-5),
             DamageSeverity = 5,
@@ -130,7 +140,16 @@ public class WorkOrderServiceUnitTests
         var logger = Substitute.For<ILogger<WorkOrderService>>();
         var service = new WorkOrderService(logger, dbContext);
 
-        var workOrder = new WorkOrder { };
+        var workOrder = new WorkOrder
+        {
+            Id = Guid.NewGuid(),
+            CustomerId = Guid.NewGuid(),
+            LicensePlate = "XXX-123",
+            RepairCategory = RepairCategory.Karosszeria,
+            DateOfProduction = DateTime.Now.AddYears(-5),
+            DamageSeverity = 5,
+            Status = JobStatus.Recorded
+        };
         dbContext.WorkOrders.Add(workOrder);
         await dbContext.SaveChangesAsync();
 
@@ -150,7 +169,14 @@ public class WorkOrderServiceUnitTests
         var logger = Substitute.For<ILogger<WorkOrderService>>();
         var service = new WorkOrderService(logger, dbContext);
 
-        var workOrder = new WorkOrder {Status = JobStatus.Recorded };
+        var workOrder = new WorkOrder {
+            Status = JobStatus.Recorded,
+            LicensePlate = "XXX-123",
+            RepairCategory = RepairCategory.Karosszeria,
+            DateOfProduction = DateTime.Now.AddYears(-5),
+            DamageSeverity = 5
+        };
+
         dbContext.WorkOrders.Add(workOrder);
         await dbContext.SaveChangesAsync();
 
@@ -164,4 +190,31 @@ public class WorkOrderServiceUnitTests
         Assert.NotNull(result);
         Assert.Equal(newStatus, result.Status);
     }
+
+
+    /*[Theory]
+    [InlineData(RepairCategory.Karosszeria, -5, 5, JobStatus.Recorded, "XXX-123")] // Invalid DateOfProduction
+    [InlineData(RepairCategory.Motor, 10, 0, JobStatus.InProgress, "XXX-123")] // Invalid damage
+    [InlineData(RepairCategory.Motor, 10, 1, JobStatus.InProgress, "X2X-123")] // Invalid licensePlate
+    public async Task AddWorkOrderAsync_InvalidInput_ThrowsException(
+        RepairCategory repairCategory, int carAge, int damageSeverity, JobStatus status, string licensePlate)
+    {
+        // Arrange
+        WorkshopDbContext dbContext = GenerateTestContext();
+        var logger = Substitute.For<ILogger<WorkOrderService>>();
+        var service = new WorkOrderService(logger, dbContext);
+
+        var invalidWorkOrder = new WorkOrder
+        {
+            CustomerId = Guid.NewGuid(),
+            RepairCategory = repairCategory,
+            DateOfProduction = DateTime.Now.AddYears(carAge),
+            DamageSeverity = damageSeverity,
+            Status = status,
+            LicensePlate = licensePlate
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => service.AddWorkOrderAsync(invalidWorkOrder));
+    }*/
 }

@@ -1,6 +1,7 @@
 ﻿using CarRepairWorkshop.API.Services.Interfaces;
 using CarRepairWorkshop.Shared;
 using CarRepairWorkshop.Shared.Enums;
+using System.Runtime.Serialization;
 
 namespace CarRepairWorkshop.API.Services
 {
@@ -16,7 +17,7 @@ namespace CarRepairWorkshop.API.Services
         public double CalculateWorkHourEstimation(WorkOrder workOrder)
         {
             try
-            {
+            {   
                 ValidateWorkOrder(workOrder);
 
                 RepairCategory category = workOrder.RepairCategory;
@@ -27,6 +28,10 @@ namespace CarRepairWorkshop.API.Services
                 double calculateFormula = (int)category * weightByAge * weightByDamage;
                 return calculateFormula;
             }
+            catch (JobDoneException ex)
+            {
+                return 0;
+            }
             catch (Exception ex)
             {
                 _logger.LogError($"Error at CalculateWorkHourEstimation: {ex.Message}");
@@ -36,15 +41,11 @@ namespace CarRepairWorkshop.API.Services
 
         private void ValidateWorkOrder(WorkOrder workOrder)
         {
-            if (workOrder == null)
-            {
-                throw new ArgumentNullException(nameof(workOrder));
-            }
+            if (workOrder == null)  throw new ArgumentNullException(nameof(workOrder));
 
-            if (workOrder.DateOfProduction > DateTime.Now)
-            {
-                throw new ArgumentException("The production date cannot be in the future.");
-            }
+            if (workOrder.DateOfProduction > DateTime.Now) throw new ArgumentException("The production date cannot be in the future.");
+            
+            if (workOrder.Status == JobStatus.Completed) throw new JobDoneException("The job is already done.");
         }
 
         private double GetWeightMultiplierByAge(int age)
@@ -107,5 +108,11 @@ namespace CarRepairWorkshop.API.Services
                 return 0;
             }
         }
+    }
+
+    [Serializable]
+    internal class JobDoneException : Exception
+    {
+        public JobDoneException(string? message) : base(message) { }
     }
 }
