@@ -1,8 +1,6 @@
 ﻿using CarRepairWorkshop.API.Services.Interfaces;
 using CarRepairWorkshop.Shared;
 using CarRepairWorkshop.Shared.Enums;
-using Microsoft.Extensions.Logging;
-using System;
 
 namespace CarRepairWorkshop.API.Services
 {
