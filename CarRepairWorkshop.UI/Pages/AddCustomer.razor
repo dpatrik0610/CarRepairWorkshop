@@ -1,0 +1,83 @@
+﻿@page "/add-customer"
+@inject ICustomerService CustomerService
+@inject NavigationManager NavigationManager
+
+<h3 class="text-light mb-4">Add Customer</h3>
+
+<EditForm Model="@customer" OnValidSubmit="@AddNewCustomer">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label class="text-light" for="Name">Name:</label>
+        <InputText id="Name" @bind-Value="customer.Name" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label class="text-light" for="Address">Address:</label>
+        <InputText id="Address" @bind-Value="customer.Address" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label class="text-light" for="Email">Email:</label>
+        <InputText id="Email" @bind-Value="customer.Email" class="form-control" />
+        <ValidationMessage For="@(() => customer.Email)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-lg btn-block mt-3">Add Customer</button>
+</EditForm>
+
+@code {
+    private Customer customer = new Customer();
+
+    private async Task AddNewCustomer()
+    {
+        try
+        {
+            await CustomerService.AddCustomerAsync(customer);
+            NavigationManager.NavigateTo("/customers");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error adding customer: {ex.Message}");
+        }
+    }
+}
+<style>
+    body {
+        background-color: #121212;
+        color: #ffffff;
+    }
+
+    .form-group label {
+        transition: color 0.3s ease-in-out;
+    }
+
+    .form-group input {
+        background-color: #333333;
+        color: #ffffff;
+        border: 1px solid #555555;
+        transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .btn-primary:active, .btn-primary:focus {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            box-shadow: none;
+        }
+
+    .text-light {
+        color: #ffffff;
+    }
+</style>
