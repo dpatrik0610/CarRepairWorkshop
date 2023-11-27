@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarRepairWorkshop.Shared", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRepairWorkshop.UI", "CarRepairWorkshop.UI\CarRepairWorkshop.UI.csproj", "{9326D1DC-D475-4455-A767-8D5BE574C4F3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRepairWorkshop.API.Tests", "CarRepairWorkshop.API.Tests\CarRepairWorkshop.API.Tests.csproj", "{6A97E8A9-5AF7-451A-B081-8A5C94DE809B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{9326D1DC-D475-4455-A767-8D5BE574C4F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9326D1DC-D475-4455-A767-8D5BE574C4F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9326D1DC-D475-4455-A767-8D5BE574C4F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A97E8A9-5AF7-451A-B081-8A5C94DE809B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A97E8A9-5AF7-451A-B081-8A5C94DE809B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A97E8A9-5AF7-451A-B081-8A5C94DE809B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A97E8A9-5AF7-451A-B081-8A5C94DE809B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
