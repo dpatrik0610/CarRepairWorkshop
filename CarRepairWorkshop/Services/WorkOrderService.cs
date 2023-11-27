@@ -93,20 +93,15 @@ namespace CarRepairWorkshop.API.Services
             }
         }
 
-        public async Task UpdateWorkOrderStatusAsync(Guid workOrderId, JobStatus newStatus)
+        public async Task UpdateWorkOrderStatusAsync(Guid workOrderId)
         {
             try
             {
                 var workOrder = await _dbContext.WorkOrders.FindAsync(workOrderId);
-
-                if (workOrder != null)
+                if (workOrder.Status != JobStatus.Completed)
                 {
-                    // Ensure the status is only updated to the next value.
-                    if (newStatus > workOrder.Status)
-                    {
-                        workOrder.Status = newStatus;
-                        await _dbContext.SaveChangesAsync();
-                    }
+                    workOrder.Status++;
+                    await _dbContext.SaveChangesAsync();
                 }
             }
             catch (Exception ex)

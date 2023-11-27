@@ -106,8 +106,8 @@ namespace CarRepairWorkshop.API.Controllers
             }
         }
 
-        [HttpPut("{id}/UpdateStatus/{newStatus}")]
-        public async Task<ActionResult> UpdateWorkOrderStatus(Guid id, JobStatus newStatus)
+        [HttpPut("/Promote")]
+        public async Task<ActionResult> UpdateWorkOrderStatus([FromBody] Guid id)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace CarRepairWorkshop.API.Controllers
                 if (existingWorkOrder == null)
                     return NotFound();
 
-                await _workOrderService.UpdateWorkOrderStatusAsync(id, newStatus);
+                await _workOrderService.UpdateWorkOrderStatusAsync(id);
 
                 return NoContent();
             }
