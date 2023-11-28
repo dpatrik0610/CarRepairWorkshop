@@ -28,20 +28,26 @@ Ex:
      }
    ```
 3. Open the solution in Visual Studio.
+4. To get dependencies and build project, Run:
+    ```bash
+   dotnet restore
+   dotnet build
+   ```
 
-4. Run the following commands to apply migrations and update the database:
+
+5. Run the following commands to apply migrations and update the database:
 
    ```bash
    dotnet ef migrations add Initial
    dotnet ef database update
    ```
 
-5. Build and run the project:
+6. Build and run the project:
 
    - Visual Studio: Press F5.
    - Visual Studio Code: Run `dotnet run` in the terminal.
 
-6. Open your web browser and navigate to [https://localhost:5000](https://localhost:5000).
+7. Open your web browser and navigate to [https://localhost:5000](https://localhost:5000).
 
 ## Project Structure
 
