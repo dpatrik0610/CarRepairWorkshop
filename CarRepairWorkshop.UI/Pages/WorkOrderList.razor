@@ -49,8 +49,6 @@ else
         <circle r="40%" cx="50%" cy="50%" />
         <circle r="40%" cx="50%" cy="50%" />
     </svg>
-    <br />
-    <p>Loading...</p>
 }
 
 @code {
@@ -60,12 +58,14 @@ else
     protected override async Task OnInitializedAsync()
     {
         WorkOrders = await WorkOrderService.GetWorkOrdersAsync();
-
+        if (WorkOrders.Any())
+        {
         var customerIds = WorkOrders?.Select(order => order.CustomerId).Distinct() ?? Enumerable.Empty<Guid>();
         var customers = await Task.WhenAll(customerIds.Select(id => CustomerService.GetCustomerByIdAsync(id)));
 
         // Populate the customerNames dictionary
         customerNames = customers.ToDictionary(customer => customer?.Id ?? Guid.Empty, customer => customer?.Name ?? "N/A");
+        }
     }
 
     private async Task RemoveWorkOrder(Guid workOrderId)

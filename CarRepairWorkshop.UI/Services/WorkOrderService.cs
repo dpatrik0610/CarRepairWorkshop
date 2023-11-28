@@ -17,8 +17,18 @@ namespace CarRepairWorkshop.UI.Services
             _httpClient = httpClient;
         }
 
-        public async Task<IEnumerable<WorkOrder>?> GetWorkOrdersAsync() =>
-            await _httpClient.GetFromJsonAsync<IEnumerable<WorkOrder>>("WorkOrder");
+        public async Task<IEnumerable<WorkOrder>?> GetWorkOrdersAsync()
+        {
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<IEnumerable<WorkOrder>>("WorkOrder");
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"HTTP request error: {ex.Message}");
+                return null;
+            }
+        }
 
         public async Task<WorkOrder?> GetWorkOrderByIdAsync(Guid workOrderId) =>
             await _httpClient.GetFromJsonAsync<WorkOrder>($"WorkOrder/{workOrderId}");

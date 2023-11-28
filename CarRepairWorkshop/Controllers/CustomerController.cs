@@ -9,10 +9,12 @@ namespace CarRepairWorkshop.API.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
+        private readonly IWorkOrderService _workOrderService;
 
-        public CustomerController(ICustomerService customerService)
+        public CustomerController(ICustomerService customerService, IWorkOrderService workOrderService)
         {
             _customerService = customerService;
+            _workOrderService = workOrderService;
         }
 
         [HttpGet]
@@ -90,6 +92,12 @@ namespace CarRepairWorkshop.API.Controllers
                 if (existingCustomer == null)
                     return NotFound();
 
+                // Deleting Customer's orders.
+                IEnumerable<WorkOrder> orders = await _workOrderService.GetWorkOrdersByCustomerIdAsync(existingCustomer.Id);
+                if (orders.Any())
+                {
+                    foreach (WorkOrder order in orders) await _workOrderService.DeleteWorkOrderAsync(order.Id);
+                }
                 await _customerService.DeleteCustomerAsync(id);
 
                 return NoContent();
