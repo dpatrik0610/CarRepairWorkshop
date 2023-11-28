@@ -14,9 +14,7 @@
                         <tr>
                             <th scope="col">Customer</th>
                             <th scope="col">License Number</th>
-                            <th scope="col">Date of production</th>
                             <th scope="col">Category</th>
-                            <th scope="col">Description</th>
                             <th scope="col">Damage</th>
                             <th scope="col">Status</th>
                             <th>Commands</th>
@@ -28,9 +26,7 @@
                             <tr>
                                 <td>@GetCustomerName(order.CustomerId)</td>
                                 <td>@order.LicensePlate</td>
-                                <td>@order.DateOfProduction.ToShortDateString()</td>
                                 <td>@order.RepairCategory</td>
-                                <td>@order.Description</td>
                                 <td>@order.DamageSeverity</td>
                                 <td>@order.Status</td>
                                 <td width="20%">
@@ -81,16 +77,5 @@ else
     private string GetCustomerName(Guid customerId)
     {
         return customerNames.TryGetValue(customerId, out var name) ? name : "N/A";
-    }
-
-    private async Task PromoteWorkOrderStatus(Guid workOrderId)
-    {
-        await WorkOrderService.UpdateWorkOrderStatusAsync(workOrderId);
-        WorkOrders = await WorkOrderService.GetWorkOrdersAsync();
-    }
-
-    private bool IsStatusMax(JobStatus status)
-    {
-        return status == JobStatus.Completed;
     }
 }
