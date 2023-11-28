@@ -33,7 +33,7 @@
     <div class="form-group">
         <label for="repairCategory" class="text-light">Repair Category:</label>
         <select id="repairCategory" class="form-control" @bind="workOrder.RepairCategory">
-            <option value="" disabled selected>Select your Category</option>
+            <option value=@RepairCategory.Motor disabled selected>Select your Category</option>
             @foreach (var category in Enum.GetValues(typeof(RepairCategory)).Cast<RepairCategory>())
             {
                 <option value="@category">@category</option>
