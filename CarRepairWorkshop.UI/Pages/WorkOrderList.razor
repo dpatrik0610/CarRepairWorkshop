@@ -35,11 +35,8 @@
                                 <td>@order.Status</td>
                                 <td width="20%">
                                     <div class="btn-group w-100" role="group">
+                                        <a class="btn btn-outline-info m-1" href="order/@order.Id.ToString()">Details</a>
                                         <button class="btn btn-outline-danger m-1" @onclick="() => RemoveWorkOrder(order.Id)">Delete</button>
-                                        <button class="btn btn-outline-success m-1" @onclick="() => PromoteWorkOrderStatus(order.Id)"
-                                                disabled="@IsStatusMax(order.Status)">
-                                            Promote
-                                        </button>
                                     </div>
                                 </td>
                             </tr>

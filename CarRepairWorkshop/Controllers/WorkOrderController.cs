@@ -126,11 +126,16 @@ namespace CarRepairWorkshop.API.Controllers
             }
         }
 
-        [HttpPost("/calculate")]
-        public ActionResult<double> CalculateEstimatedTime([FromBody] WorkOrder workOrder)
+        [HttpGet("calculate/{workOrderId}")]
+        public async Task<ActionResult<double>> CalculateEstimatedTime(Guid workOrderId)
         {
             try
             {
+                WorkOrder workOrder = await _workOrderService.GetWorkOrderByIdAsync(workOrderId);
+                if (workOrder == null)
+                {
+                    return NotFound();
+                }
                 double estimatedTime = _workEstimationService.CalculateWorkHourEstimation(workOrder);
                 return Ok(estimatedTime);
             }

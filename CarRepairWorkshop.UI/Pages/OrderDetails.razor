@@ -1,0 +1,39 @@
+﻿@page "/order/{Id}"
+@inject IWorkOrderService WorkOrderService
+@inject ICustomerService CustomerService
+@inject NavigationManager NavigationManager
+
+@if (workOrder is not null)
+{
+    <h3>@workOrder.LicensePlate Details</h3>
+    <OrderDetailsTemplate workOrder="workOrder" />
+}
+else if (!_isFound)
+{
+    <p>Work Order with id '@Id' is not found!</p>
+}
+else
+{
+    <p>Loading Data...</p>
+}
+
+@code {
+    private bool _isFound = true;
+
+    [Parameter]
+    public string Id { get; set; }
+
+    private WorkOrder workOrder { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            workOrder = await WorkOrderService.GetWorkOrderByIdAsync(Guid.Parse(Id));
+        }
+        catch
+        {
+            _isFound = false;
+        }
+    }
+}

@@ -11,6 +11,6 @@ namespace CarRepairWorkshop.UI.Services.Interfaces
         Task AddWorkOrderAsync(WorkOrder workOrder);
         Task UpdateWorkOrderStatusAsync(Guid id);
         Task DeleteWorkOrderAsync(Guid workOrderId);
-        Task<double?> CalculateEstimatedTime(WorkOrder workOrder);
+        Task<double?> CalculateEstimatedTime(Guid id);
     }
 }

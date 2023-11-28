@@ -37,10 +37,9 @@ namespace CarRepairWorkshop.UI.Services
             await _httpClient.PostAsJsonAsync($"WorkOrder/Promote", id);
         }
 
-        public async Task<double?> CalculateEstimatedTime(WorkOrder workOrder)
+        public async Task<double?> CalculateEstimatedTime(Guid id)
         {
-            var response = await _httpClient.PostAsJsonAsync("/WorkOrder/calculate", workOrder);
-            response.EnsureSuccessStatusCode();
+            var response = await _httpClient.GetAsync($"WorkOrder/calculate/{id}");
             return await response.Content.ReadFromJsonAsync<double?>();
         }
     }

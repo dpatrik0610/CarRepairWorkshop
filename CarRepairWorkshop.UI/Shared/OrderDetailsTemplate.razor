@@ -1,0 +1,72 @@
+﻿@inject ICustomerService CustomerService;
+@inject IWorkOrderService WorkOrderService;
+
+<div class="container mt-5">
+    <div class="card bg-dark text-light p-4 rounded">
+        <h3 class="card-title">@workOrder.LicensePlate Details</h3>
+
+        @if (customerName != null && estimationResult.HasValue)
+        {
+            <dl class="row">
+                <dt class="col-sm-3">Customer:</dt>
+                <dd class="col-sm-9">@customerName</dd>
+
+                <dt class="col-sm-3">License Plate:</dt>
+                <dd class="col-sm-9">@workOrder.LicensePlate</dd>
+
+                <dt class="col-sm-3">Date of Production:</dt>
+                <dd class="col-sm-9">@workOrder.DateOfProduction.ToShortDateString()</dd>
+
+                <dt class="col-sm-3">Repair Category:</dt>
+                <dd class="col-sm-9">@workOrder.RepairCategory</dd>
+
+                <dt class="col-sm-3">Description:</dt>
+                <dd class="col-sm-9">@workOrder.Description</dd>
+
+                <dt class="col-sm-3">Damage Severity:</dt>
+                <dd class="col-sm-9">@workOrder.DamageSeverity</dd>
+
+                <dt class="col-sm-3">Status:</dt>
+                <dd class="col-sm-9">@workOrder.Status</dd>
+
+                <dt class="col-sm-3">Estimated Work in Hours:</dt>
+                <dd class="col-sm-9">@estimationResult</dd>
+            </dl>
+
+            <button class="btn btn-primary form-control" @onclick="PromoteWorkOrder" disabled="@IsStatusComplete()">Promote</button>
+        }
+        else
+        {
+            <p>Loading...</p>
+        }
+    </div>
+</div>
+
+@code {
+    private string customerName;
+    private double? estimationResult;
+
+    [Parameter]
+    public WorkOrder workOrder { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var customerId = workOrder.CustomerId;
+        var customer = await CustomerService.GetCustomerByIdAsync(customerId);
+        this.customerName = customer.Name;
+
+        estimationResult = await WorkOrderService.CalculateEstimatedTime(workOrder.Id);
+    }
+
+    private bool IsStatusComplete()
+    {
+        return workOrder.Status == JobStatus.Completed;
+    }
+
+    private async Task PromoteWorkOrder()
+    {
+        await WorkOrderService.UpdateWorkOrderStatusAsync(workOrder.Id);
+        workOrder.Status = (JobStatus)(workOrder.Status++);
+    }
+}
