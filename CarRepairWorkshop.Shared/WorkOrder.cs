@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 using CarRepairWorkshop.Shared.Enums;
 
 namespace CarRepairWorkshop.Shared
@@ -21,11 +20,13 @@ namespace CarRepairWorkshop.Shared
         [Required]
         [NotNull]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        [Range(typeof(DateTime), "1900-01-01", "{0:yyyy-MM-dd}", ErrorMessage = "Date of production cannot be lower than 1900 and above today's date.")]
+        [DateRange(ErrorMessage = "Date of production cannot be lower than 1900 and above today's date.")]
         public DateTime DateOfProduction { get; set; } = DateTime.Now;
 
-        [Required]
+        [Required(ErrorMessage = "Please Provide a correct Category from the list.")]
+        [NotNull]
         public RepairCategory RepairCategory { get; set; }
+
         [Required]
         [MaxLength(150)]
         public string Description { get; set; } = string.Empty;
