@@ -183,7 +183,7 @@ public class WorkOrderServiceUnitTests
         var newStatus = JobStatus.InProgress;
 
         // Act
-        await service.UpdateWorkOrderStatusAsync(workOrder.Id, newStatus);
+        await service.UpdateWorkOrderStatusAsync(workOrder.Id);
 
         // Assert
         var result = await dbContext.WorkOrders.FirstOrDefaultAsync(w => w.Id == workOrder.Id);
