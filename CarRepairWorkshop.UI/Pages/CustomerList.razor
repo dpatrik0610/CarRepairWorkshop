@@ -12,7 +12,7 @@
                 <table class="table table-hover table-bordered table-dark">
                     <thead>
                         <tr>
-                            <th scope="col">Name</th>
+                            <th scope="col">Customer</th>
                             <th scope="col">Address</th>
                             <th scope="col">E-mail</th>
                             <th>Commands</th>
@@ -22,12 +22,16 @@
                         @foreach (var customer in Customers)
                         {
                             <tr>
-                                <td>@customer.Name</td>
+                                <td width="15%">
+                                    <div class="btn-group w-100" role="group">
+                                        <a class="btn btn-outline-info m-1" href="details/@customer.Id.ToString()">@customer.Name</a>
+                                    </div>
+                                </td>
                                 <td>@customer.Address</td>
                                 <td>@customer.Email</td>
                                 <td width="20%">
                                     <div class="btn-group w-100" role="group">
-                                        <a class="btn btn-outline-info m-1" href="details/@customer.Id.ToString()">Details</a>
+                                        <a class="btn btn-outline-warning m-1" href="customer/@customer.Id.ToString()/orders">Orders</a>
                                         <button class="btn btn-outline-danger m-1" @onclick="() => RemoveCustomer(customer.Id)">Delete</button>
                                     </div>
                                 </td>

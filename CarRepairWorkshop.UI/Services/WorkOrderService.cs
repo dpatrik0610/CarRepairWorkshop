@@ -23,8 +23,8 @@ namespace CarRepairWorkshop.UI.Services
         public async Task<WorkOrder?> GetWorkOrderByIdAsync(Guid workOrderId) =>
             await _httpClient.GetFromJsonAsync<WorkOrder>($"WorkOrder/{workOrderId}");
 
-        public async Task<IEnumerable<WorkOrder>?> GetWorkOrdersByCustomerIdAsync(string workOrderName) =>
-            await _httpClient.GetFromJsonAsync<IEnumerable<WorkOrder>>($"WorkOrder/ByCustomer/{workOrderName}");
+        public async Task<IEnumerable<WorkOrder>?> GetWorkOrdersByCustomerIdAsync(Guid customerId) =>
+            await _httpClient.GetFromJsonAsync<IEnumerable<WorkOrder>>($"WorkOrder/ByCustomer/{customerId}");
 
         public async Task AddWorkOrderAsync(WorkOrder workOrder) =>
             await _httpClient.PostAsJsonAsync("WorkOrder", workOrder);

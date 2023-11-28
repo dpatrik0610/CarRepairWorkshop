@@ -1,0 +1,63 @@
+﻿@page "/customer/{CustomerId}/orders"
+@inject IWorkOrderService WorkOrderService
+@inject ICustomerService CustomerService
+
+<h1 class="text-dark">Work Orders for Customer: @customerName</h1>
+<div class="container-fluid bg-dark text-light p-5">
+    @if (workOrders != null && workOrders.Any())
+    {
+        <table class="table table-hover table-bordered table-dark mt-4">
+            <thead>
+                <tr>
+                    <th scope="col">License Plate</th>
+                    <th scope="col">Date of Production</th>
+                    <th scope="col">Repair Category</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Damage Severity</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in workOrders)
+                {
+                    <tr>
+                        <td>@order.LicensePlate</td>
+                        <td>@order.DateOfProduction.ToShortDateString()</td>
+                        <td>@order.RepairCategory</td>
+                        <td>@order.Description</td>
+                        <td>@order.DamageSeverity</td>
+                        <td>@order.Status</td>
+                        <td width="20%">
+                            <div class="btn-group w-100" role="group">
+                                <a class="btn btn-outline-info m-1" href="order/@order.Id.ToString()">Details</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No work orders found for this customer.</p>
+    }
+</div>
+
+@code {
+    private IEnumerable<WorkOrder>? workOrders;
+    private string customerName = "N/A";
+
+    [Parameter]
+    public string CustomerId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var customer = await CustomerService.GetCustomerByIdAsync(Guid.Parse(CustomerId));
+        if (customer != null)
+        {
+            customerName = customer.Name;
+            workOrders = await WorkOrderService.GetWorkOrdersByCustomerIdAsync(Guid.Parse(CustomerId));
+        }
+    }
+}
